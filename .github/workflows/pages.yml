@@ -1,0 +1,52 @@
+# ESP Forge：推到 main 就檢查、建置並部署到 GitHub Pages。
+# 程式碼閱讀器需要韌體原始碼：建置時取 agharsallah/esp-labs 固定版本放在旁邊（同上游 CI 的做法）。
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: agharsallah/esp-labs
+          ref: 72f1fc1f5cb81a5fadb4ccc97b29bf5fc68fa30b
+          path: esp-labs-firmware
+          persist-credentials: false
+      - name: Place the firmware beside the guide
+        run: mv esp-labs-firmware ../esp-labs
+      - uses: ./.github/actions/setup
+      - name: Typecheck, lint, test
+        run: pnpm check
+      - name: Build
+        run: pnpm build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
