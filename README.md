@@ -2,7 +2,7 @@
 
 ESP32-S3（N16R8）互動式實作指南：即時腳位圖、32 個實驗、可在瀏覽器裡操作的模擬器、3D 開發板、逐行解說韌體的程式碼閱讀器，以及整理成好讀版本的晶片資料手冊。介面支援 11 種語言（含繁體中文）。
 
-- **網站**：https://brian479974.github.io/esp-forge/?lang=zh-TW
+- **網站**：https://d-boy.markforged.tw/?lang=zh-TW（舊網址 brian479974.github.io/esp-forge/ 會自動轉過來）
 - **部署**：推到 `main` 由 GitHub Actions 檢查（型別、lint、671 項測試）、建置並發布到 GitHub Pages（`.github/workflows/pages.yml`）。
 
 ## 來源與授權
